@@ -2,6 +2,7 @@
   "name": "create-veap",
   "version": "0.1.0",
   "description": "Initializer for Veap Framework applications",
+  "bugs": "https://github.com/veap-sh/create-veap/issues",
   "repository": {
     "type": "git",
     "url": "https://github.com/veap-sh/create-veap.git"
