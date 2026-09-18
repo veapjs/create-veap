@@ -1,0 +1,27 @@
+import { cache } from "react";
+import { Application } from "@veap/core/core/server";
+
+import { default as MinimalTemplate } from "@veap/minimal-template";
+import { appMigrations } from "../migrations";
+import { plugins } from "./plugins.gen";
+
+export const app = Application.configure()
+  .withDatabase()
+  .withAuth()
+  .withStorage()
+  .withCommunication()
+  .withIntl()
+  .withRouter()
+  .withSettings()
+  .withMigrations(appMigrations)
+  .withPlugins(plugins)
+  .withTemplates([MinimalTemplate])
+  .create();
+
+/**
+ * Main system bootstrap function.
+ * Called automatically in root layout/pages.
+ */
+export const initializeSystem = cache(async () => {
+  return app.bootstrap();
+});

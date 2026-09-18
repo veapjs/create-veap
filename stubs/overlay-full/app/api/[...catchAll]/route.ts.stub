@@ -1,0 +1,111 @@
+import { ApiEnsuredAuth, runApiPipeline } from "@veap/core/router/server";
+import { initializeSystem } from "@/lib/veap";
+
+export const dynamic = "force-dynamic";
+
+async function handleRequest(
+  request: Request,
+  context: { params: Promise<{ catchAll: string[] }> },
+) {
+  // Ensure system is initialized (DB injected, plugins registered)
+  await initializeSystem();
+
+  const { catchAll } = await context.params;
+  const path = `/api/${catchAll.join("/")}`;
+
+  const { buildRouteTree } = await import("@veap/core/router/server");
+  const tree = await buildRouteTree(true);
+
+  const match = tree.match(path);
+
+  const node = match?.node as any;
+
+  if (match?.isExact && node?.route) {
+    const method = request.method.toUpperCase();
+    const handler = node.route[method] || node.route.handler;
+
+    if (handler) {
+      const middlewares = [];
+
+      // Collect middlewares from the layout chain
+      for (const entry of match.layoutChain) {
+        if (entry.middlewares) {
+          middlewares.push(...entry.middlewares);
+        }
+      }
+
+      // Node middlewares
+      if (node.middlewares) {
+        middlewares.push(...node.middlewares);
+      }
+
+      // Resolve auth from chain (closest to leaf wins)
+      let authRequired = node.auth;
+      if (authRequired === undefined) {
+        for (let i = match.layoutChain.length - 1; i >= 0; i--) {
+          if (match.layoutChain[i].auth !== undefined) {
+            authRequired = match.layoutChain[i].auth;
+            break;
+          }
+        }
+      }
+
+      // Roles and permissions
+      let roles = node.roles;
+      if (!roles) {
+        for (let i = match.layoutChain.length - 1; i >= 0; i--) {
+          if (match.layoutChain[i].roles) {
+            roles = match.layoutChain[i].roles;
+            break;
+          }
+        }
+      }
+
+      let permissions = node.permissions;
+      if (!permissions) {
+        for (let i = match.layoutChain.length - 1; i >= 0; i--) {
+          if (match.layoutChain[i].permissions) {
+            permissions = match.layoutChain[i].permissions;
+            break;
+          }
+        }
+      }
+
+      if (authRequired) {
+        middlewares.unshift(ApiEnsuredAuth);
+      }
+
+      return await runApiPipeline(
+        middlewares as any,
+        request,
+        {
+          params: match.params,
+          roles,
+          permissions,
+        },
+        async (req: Request, ctx: any) => {
+          return handler(req, ctx);
+        },
+      );
+    } else {
+      return new Response(
+        JSON.stringify({ error: `Method ${method} Not Allowed` }),
+        {
+          status: 405,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
+  }
+
+  return new Response(JSON.stringify({ error: "API Route not found" }), {
+    status: 404,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+export const GET = handleRequest;
+export const POST = handleRequest;
+export const PUT = handleRequest;
+export const PATCH = handleRequest;
+export const DELETE = handleRequest;

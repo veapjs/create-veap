@@ -1,0 +1,47 @@
+import { VeapRouter } from "@veap/core/router";
+import { buildRouteTree } from "@veap/core/router/server";
+import type { Metadata } from "next";
+import { initializeSystem } from "@/lib/veap";
+
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ catchAll?: string[] }>;
+  searchParams: Promise<Record<string, string>>;
+}): Promise<Metadata> {
+  const { catchAll } = await params;
+  const sParams = await searchParams;
+  const path = catchAll && catchAll.length > 0 ? `/${catchAll.join("/")}` : "/";
+
+  await initializeSystem();
+  const tree = await buildRouteTree(true);
+  const result = await tree.generateMetadata(path, sParams);
+
+  return result;
+}
+
+export default async function CatchAllPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ catchAll?: string[] }>;
+  searchParams: Promise<any>;
+}) {
+  const { catchAll } = await params;
+  const sParams = await searchParams;
+  const path = catchAll && catchAll.length > 0 ? `/${catchAll.join("/")}` : "/";
+
+  await initializeSystem();
+  const tree = await buildRouteTree(true);
+
+  const result = await VeapRouter({
+    tree,
+    path,
+    searchParams: sParams,
+  });
+
+  return result;
+}

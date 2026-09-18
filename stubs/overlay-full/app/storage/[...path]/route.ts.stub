@@ -1,0 +1,61 @@
+import fs from "node:fs";
+import path from "node:path";
+import { type NextRequest, NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
+
+export async function GET(
+  request: NextRequest,
+  context: { params: Promise<{ path: string[] }> },
+) {
+  const resolvedParams = await context.params;
+  const filePath = path.join(
+    /*turbopackIgnore: true*/ process.cwd(),
+    "public",
+    "storage",
+    ...resolvedParams.path,
+  );
+
+  // Prevent Directory Traversal Attacks!
+  const safePath = path.normalize(filePath);
+  const baseStoragePath = path.join(
+    /*turbopackIgnore: true*/ process.cwd(),
+    "public",
+    "storage",
+  );
+  if (!safePath.startsWith(baseStoragePath)) {
+    return new NextResponse("Forbidden", { status: 403 });
+  }
+
+  if (
+    !fs.existsSync(/*turbopackIgnore: true*/ safePath) ||
+    fs.statSync(/*turbopackIgnore: true*/ safePath).isDirectory()
+  ) {
+    return new NextResponse("Not Found", { status: 404 });
+  }
+
+  const fileBuffer = fs.readFileSync(/*turbopackIgnore: true*/ safePath);
+
+  // Determine Content-Type
+  const ext = path.extname(safePath).toLowerCase();
+  let contentType = "application/octet-stream";
+  if (ext === ".png") contentType = "image/png";
+  else if (ext === ".jpg" || ext === ".jpeg") contentType = "image/jpeg";
+  else if (ext === ".gif") contentType = "image/gif";
+  else if (ext === ".svg") contentType = "image/svg+xml";
+  else if (ext === ".webp") contentType = "image/webp";
+  else if (ext === ".md" || ext === ".mdx")
+    contentType = "text/markdown; charset=utf-8";
+  else if (ext === ".json") contentType = "application/json";
+  else if (ext === ".txt") contentType = "text/plain; charset=utf-8";
+  else if (ext === ".pdf") contentType = "application/pdf";
+  else if (ext === ".css") contentType = "text/css";
+  else if (ext === ".js") contentType = "application/javascript";
+
+  return new NextResponse(fileBuffer, {
+    headers: {
+      "Content-Type": contentType,
+      "Cache-Control": "public, max-age=31536000, immutable",
+    },
+  });
+}

@@ -1,0 +1,29 @@
+import Link from "next/link";
+
+// The root layout boots Veap (`initializeSystem()`), reads cookies and renders
+// plugin extension points - all request-time concerns. During `next build`,
+// Next.js prerenders `/_not-found` with `NEXT_PHASE=phase-production-build`,
+// in which `Application.bootstrap()` intentionally skips provider boot, so the
+// context-bound helpers in the layout would throw. Marking this route
+// force-dynamic keeps prerendering away and the framework off the 404 path.
+export const dynamic = "force-dynamic";
+
+export default function NotFound() {
+  return (
+    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-4 text-center">
+      <p className="text-sm font-semibold tracking-widest uppercase opacity-60">
+        404
+      </p>
+      <h1 className="text-3xl font-bold">Page not found</h1>
+      <p className="max-w-md opacity-70">
+        The page you are looking for does not exist or has been moved.
+      </p>
+      <Link
+        href="/"
+        className="bg-primary text-primary-foreground hover:bg-primary/90 mt-2 inline-flex h-10 items-center justify-center rounded-md px-6 text-sm font-medium transition-colors"
+      >
+        Back to home
+      </Link>
+    </div>
+  );
+}

@@ -1,0 +1,34 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  serverExternalPackages: ["knex", "pg", "better-sqlite3"],
+  // Output for standalone build in docker (disabled on Vercel to avoid build crash)
+  output: process.env.VERCEL ? undefined : "standalone",
+
+  transpilePackages: ["@veap/core", "@veap/ui"],
+
+  reactCompiler: true,
+
+  experimental: {
+    turbopackFileSystemCacheForBuild: true,
+    turbopackRustReactCompiler: true
+  },
+
+  outputFileTracingIncludes: {
+    "/**/*": ["veap.config.ts"],
+  },
+
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
+
+  images: {
+    unoptimized: true,
+  },
+};
+
+export default nextConfig;
