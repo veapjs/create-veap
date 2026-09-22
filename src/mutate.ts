@@ -81,7 +81,7 @@ export function injectVeapDependencies(
  * Builds the starter `.env` content.
  *
  * ENCRYPTION_KEY is generated randomly per project (16 bytes, base64 - the
- * exact contract validated at boot by @veap/core, which has no fallback
+ * exact contract validated at boot by @veap/framework, which has no fallback
  * since the fail-fast fix). DATABASE_URL defaults to a local SQLite file;
  * mail values are left as documented placeholders.
  */

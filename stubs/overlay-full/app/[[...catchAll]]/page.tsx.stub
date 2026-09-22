@@ -1,5 +1,5 @@
-import { VeapRouter } from "@veap/core/router";
-import { buildRouteTree } from "@veap/core/router/server";
+import { VeapRouter } from "@veap/framework/router";
+import { buildRouteTree } from "@veap/framework/router/server";
 import type { Metadata } from "next";
 import { initializeSystem } from "@/lib/veap";
 

@@ -28,7 +28,7 @@ export const FULL_MANIFEST: VeapDependencyManifest = {
   dependencies: {
     dotenv: "^17.2.3",
     pg: "^8.16.3",
-    "@veap/core": "^0.1.0",
+    "@veap/framework": "^0.1.0",
     "@veap/ui": "^0.1.0",
     "@veap/minimal-template": "^0.1.0",
   },

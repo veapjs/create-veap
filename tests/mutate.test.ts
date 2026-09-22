@@ -16,7 +16,7 @@ import {
   sanitizeProjectName,
 } from "../src/scaffold.js";
 
-/** Decodes base64 the same way @veap/core validates ENCRYPTION_KEY. */
+/** Decodes base64 the same way @veap/framework validates ENCRYPTION_KEY. */
 function decodedKeyLength(base64: string): number {
   return Buffer.from(base64, "base64").length;
 }
@@ -84,7 +84,7 @@ describe("injectVeapDependencies", () => {
 
     expect(pkg.dependencies.next).toBe("16.3.5");
     expect(pkg.dependencies.react).toBe("19.2.8");
-    expect(pkg.dependencies["@veap/core"]).toBe("^0.1.0");
+    expect(pkg.dependencies["@veap/framework"]).toBe("^0.1.0");
     expect(pkg.dependencies["@veap/minimal-template"]).toBe("^0.1.0");
     expect(pkg.devDependencies["@types/node"]).toBe("^22.20.2");
     // CNA's eslint setup is kept untouched.

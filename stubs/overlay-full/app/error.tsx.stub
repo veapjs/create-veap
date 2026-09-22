@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslation } from "@veap/core/intl";
+import { useTranslation } from "@veap/framework/intl";
 import { useEffect } from "react";
 
 export default function ErrorPage({

@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   // Output for standalone build in docker (disabled on Vercel to avoid build crash)
   output: process.env.VERCEL ? undefined : "standalone",
 
-  transpilePackages: ["@veap/core", "@veap/ui"],
+  transpilePackages: ["@veap/framework", "@veap/ui"],
 
   reactCompiler: true,
 

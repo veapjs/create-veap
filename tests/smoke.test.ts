@@ -77,9 +77,9 @@ d("create-veap smoke (full pipeline)", () => {
       "utf-8",
     );
     expect(layout).toContain("force-dynamic");
-    expect(layout).toContain("@veap/core");
+    expect(layout).toContain("@veap/framework");
     // Session helpers come from the core auth entry, not from lib/veap.
-    expect(layout).toContain("@veap/core/auth/server");
+    expect(layout).toContain("@veap/framework/auth/server");
 
     expect(
       fs.existsSync(
@@ -113,7 +113,7 @@ d("create-veap smoke (full pipeline)", () => {
     const pkg = JSON.parse(
       fs.readFileSync(path.join(projectDir, "package.json"), "utf-8"),
     );
-    expect(pkg.dependencies["@veap/core"]).toBe("^0.1.0");
+    expect(pkg.dependencies["@veap/framework"]).toBe("^0.1.0");
     // Linting comes from CNA's own ESLint setup, not from a veap pin.
     expect(pkg.devDependencies.eslint).toBeDefined();
     expect(pkg.devDependencies["eslint-config-next"]).toBeDefined();
@@ -122,7 +122,7 @@ d("create-veap smoke (full pipeline)", () => {
     const env = fs.readFileSync(path.join(projectDir, ".env"), "utf-8");
     const key = env.match(/ENCRYPTION_KEY="([^"]+)"/)?.[1];
     expect(key).toBeDefined();
-    // The @veap/core fail-fast contract: exactly 16 bytes decoded.
+    // The @veap/framework fail-fast contract: exactly 16 bytes decoded.
     expect(Buffer.from(key!, "base64")).toHaveLength(16);
     expect(env).toContain("DATABASE_URL=");
 

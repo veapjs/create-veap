@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { Application } from "@veap/core/core/server";
+import { Application } from "@veap/framework/core/server";
 
 import { default as MinimalTemplate } from "@veap/minimal-template";
 import { appMigrations } from "../migrations";

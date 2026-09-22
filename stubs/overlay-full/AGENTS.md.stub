@@ -32,7 +32,7 @@ Why: `Application.bootstrap()` intentionally skips provider boot during `next bu
 
 ### 3. Database safety
 
-All mutations go through `transaction()` from `@veap/core/database` (AsyncLocalStorage-based). Raw knex handles are available for reads, but transactions are the only supported write path.
+All mutations go through `transaction()` from `@veap/framework/database` (AsyncLocalStorage-based). Raw knex handles are available for reads, but transactions are the only supported write path.
 
 ### 4. Plugins and events
 
@@ -58,6 +58,6 @@ veap make:migration <name>
 
 ## Source of Truth
 
-The installed framework code (`node_modules/@veap/core`) overrides any documentation, including this file. If this file disagrees with the code, follow the code.
+The installed framework code (`node_modules/@veap/framework`) overrides any documentation, including this file. If this file disagrees with the code, follow the code.
 
 <!-- END:veap-agent-rules -->

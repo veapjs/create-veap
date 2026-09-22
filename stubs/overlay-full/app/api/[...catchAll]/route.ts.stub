@@ -1,4 +1,4 @@
-import { ApiEnsuredAuth, runApiPipeline } from "@veap/core/router/server";
+import { ApiEnsuredAuth, runApiPipeline } from "@veap/framework/router/server";
 import { initializeSystem } from "@/lib/veap";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +13,7 @@ async function handleRequest(
   const { catchAll } = await context.params;
   const path = `/api/${catchAll.join("/")}`;
 
-  const { buildRouteTree } = await import("@veap/core/router/server");
+  const { buildRouteTree } = await import("@veap/framework/router/server");
   const tree = await buildRouteTree(true);
 
   const match = tree.match(path);
