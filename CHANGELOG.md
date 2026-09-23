@@ -1,5 +1,13 @@
 # create-veap
 
+## 0.1.2
+
+### Patch Changes
+
+- Add dedicated bin executable wrapper and update CLI binary entry point:
+  - Add `bin/veap.js` executable wrapper to execute compiled CLI from dist.
+  - Update `package.json` bin mapping to reference `./bin/veap.js`.
+
 ## 0.1.1
 
 ### Patch Changes

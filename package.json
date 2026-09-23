@@ -1,6 +1,6 @@
 {
   "name": "create-veap",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Initializer for Veap Framework applications",
   "bugs": "https://github.com/veapjs/create-veap/issues",
   "repository": {
@@ -11,7 +11,7 @@
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
   "bin": {
-    "create-veap": "./dist/index.js"
+    "create-veap": "./bin/veap.js"
   },
   "exports": {
     ".": {
