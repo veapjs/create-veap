@@ -1,5 +1,12 @@
 # create-veap
 
+## 0.1.3
+
+### Patch Changes
+
+- Add `better-sqlite3` to scaffolded project dependencies:
+  - Include `better-sqlite3: "latest"` in `FULL_MANIFEST` dependencies so generated applications have the native SQLite driver installed out-of-the-box.
+
 ## 0.1.2
 
 ### Patch Changes

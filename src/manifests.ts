@@ -28,6 +28,7 @@ export const FULL_MANIFEST: VeapDependencyManifest = {
   dependencies: {
     dotenv: "^17.2.3",
     pg: "^8.16.3",
+    "better-sqlite3": "latest",
     "@veap/framework": "latest",
     "@veap/ui": "latest",
   },
