@@ -84,8 +84,8 @@ describe("injectVeapDependencies", () => {
 
     expect(pkg.dependencies.next).toBe("16.3.5");
     expect(pkg.dependencies.react).toBe("19.2.8");
-    expect(pkg.dependencies["@veap/framework"]).toBe("^0.1.0");
-    expect(pkg.dependencies["@veap/minimal-template"]).toBe("^0.1.0");
+    expect(pkg.dependencies["@veap/framework"]).toBe("latest");
+    expect(pkg.dependencies["@veap/ui"]).toBe("latest");
     expect(pkg.devDependencies["@types/node"]).toBe("^22.20.2");
     // CNA's eslint setup is kept untouched.
     expect(pkg.devDependencies.eslint).toBe("^9");

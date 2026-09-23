@@ -1,7 +1,6 @@
 import { cache } from "react";
 import { Application } from "@veap/framework/core/server";
 
-import { default as MinimalTemplate } from "@veap/minimal-template";
 import { appMigrations } from "../migrations";
 import { plugins } from "./plugins.gen";
 
@@ -15,7 +14,7 @@ export const app = Application.configure()
   .withSettings()
   .withMigrations(appMigrations)
   .withPlugins(plugins)
-  .withTemplates([MinimalTemplate])
+  .withTemplates([])
   .create();
 
 /**

@@ -113,7 +113,8 @@ d("create-veap smoke (full pipeline)", () => {
     const pkg = JSON.parse(
       fs.readFileSync(path.join(projectDir, "package.json"), "utf-8"),
     );
-    expect(pkg.dependencies["@veap/framework"]).toBe("^0.1.0");
+    expect(pkg.dependencies["@veap/framework"]).toBe("latest");
+    expect(pkg.dependencies["@veap/ui"]).toBe("latest");
     // Linting comes from CNA's own ESLint setup, not from a veap pin.
     expect(pkg.devDependencies.eslint).toBeDefined();
     expect(pkg.devDependencies["eslint-config-next"]).toBeDefined();

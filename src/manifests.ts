@@ -28,9 +28,8 @@ export const FULL_MANIFEST: VeapDependencyManifest = {
   dependencies: {
     dotenv: "^17.2.3",
     pg: "^8.16.3",
-    "@veap/framework": "workspace:*",
-    "@veap/ui": "workspace:*",
-    "@veap/minimal-template": "workspace:*",
+    "@veap/framework": "latest",
+    "@veap/ui": "latest",
   },
   devDependencies: {
     ...PINNED_DEV_DEPENDENCIES,

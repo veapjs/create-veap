@@ -1,6 +1,6 @@
 {
   "name": "create-veap",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Initializer for Veap Framework applications",
   "bugs": "https://github.com/veapjs/create-veap/issues",
   "repository": {
