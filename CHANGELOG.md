@@ -1,5 +1,11 @@
 # create-veap
 
+## 0.1.4
+
+### Patch Changes
+
+- Add package manager flags to create-next-app and fallback to npx on runner network failure
+
 ## 0.1.3
 
 ### Patch Changes
