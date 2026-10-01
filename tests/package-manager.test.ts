@@ -132,7 +132,6 @@ describe("applyPackageManager", () => {
       "utf-8",
     );
     expect(content).toContain('"plugins/*"');
-    expect(content).toContain('"templates/*"');
   });
 
   it("switches npm projects to the workspaces field and drops packageManager", () => {
@@ -142,7 +141,7 @@ describe("applyPackageManager", () => {
       fs.readFileSync(path.join(dir, "package.json"), "utf-8"),
     );
     expect(pkg.packageManager).toBeUndefined();
-    expect(pkg.workspaces).toEqual(["plugins/*", "templates/*"]);
+    expect(pkg.workspaces).toEqual(["plugins/*"]);
     expect(fs.existsSync(path.join(dir, "pnpm-workspace.yaml"))).toBe(false);
     expect(fs.existsSync(path.join(dir, ".yarnrc.yml"))).toBe(false);
   });
@@ -154,7 +153,7 @@ describe("applyPackageManager", () => {
       fs.readFileSync(path.join(dir, "package.json"), "utf-8"),
     );
     expect(pkg.packageManager).toBe("yarn@4.9.2");
-    expect(pkg.workspaces).toEqual(["plugins/*", "templates/*"]);
+    expect(pkg.workspaces).toEqual(["plugins/*"]);
     expect(fs.existsSync(path.join(dir, "pnpm-workspace.yaml"))).toBe(false);
     const yarnrc = fs.readFileSync(path.join(dir, ".yarnrc.yml"), "utf-8");
     expect(yarnrc).toContain("nodeLinker: node-modules");
@@ -167,7 +166,7 @@ describe("applyPackageManager", () => {
       fs.readFileSync(path.join(dir, "package.json"), "utf-8"),
     );
     expect(pkg.packageManager).toBeUndefined();
-    expect(pkg.workspaces).toEqual(["plugins/*", "templates/*"]);
+    expect(pkg.workspaces).toEqual(["plugins/*"]);
     expect(fs.existsSync(path.join(dir, "pnpm-workspace.yaml"))).toBe(false);
   });
 

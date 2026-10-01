@@ -107,7 +107,6 @@ export async function initProject(
       path.join(destDir, "public"),
       path.join(destDir, "storage"),
       path.join(destDir, "plugins"),
-      path.join(destDir, "templates"),
     ]) {
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });

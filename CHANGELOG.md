@@ -1,5 +1,17 @@
 # create-veap
 
+## 0.2.0
+
+### Minor Changes
+
+- ### Remove Legacy Templates Scaffolding and Align Stubs with Modern Architecture
+  - **Workspace & Scaffolding Updates**:
+    - Removed `templates/` folder creation from default project initialization in `initProject`.
+    - Removed `templates/*` pattern from package manager workspace configurations across `pnpm` (`pnpm-workspace.yaml`), `npm`, `yarn`, and `bun` (`package.json.workspaces`).
+  - **Overlay Stubs Clean Up**:
+    - Removed `.withTemplates([])` from `stubs/overlay-full/lib/veap.ts.stub`.
+    - Updated `stubs/overlay-full/AGENTS.md.stub` project structure instructions to remove references to `templates/`.
+
 ## 0.1.4
 
 ### Patch Changes

@@ -243,12 +243,12 @@ export function applyPackageManager(
     if (!fs.existsSync(pnpmWorkspace)) {
       fs.writeFileSync(
         pnpmWorkspace,
-        'packages:\n  - "plugins/*"\n  - "templates/*"\n',
+        'packages:\n  - "plugins/*"\n',
         "utf-8",
       );
     }
   } else {
-    pkg.workspaces = ["plugins/*", "templates/*"];
+    pkg.workspaces = ["plugins/*"];
     if (fs.existsSync(pnpmWorkspace)) {
       // Switching away from pnpm: the file would shadow the workspaces field.
       fs.rmSync(pnpmWorkspace);

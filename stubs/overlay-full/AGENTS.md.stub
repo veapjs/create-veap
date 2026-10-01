@@ -11,7 +11,7 @@ This project is a **Veap** application: the official `create-next-app` base plus
 - `app/[[...catchAll]]/page.tsx` - every page render goes through `VeapRouter` (route tree built from plugins + app routes). Do not add competing page routes without understanding the router.
 - `app/api/[...catchAll]/route.ts` - API pipeline: middlewares, auth, roles/permissions resolved from the route tree.
 - `app/layout.tsx`, `app/not-found.tsx` - root shell with the bootstrap and the **force-dynamic contract (below)**.
-- `plugins/`, `templates/` - workspace packages (pnpm workspace / npm workspaces).
+- `plugins/` - workspace packages (pnpm workspace / npm workspaces).
 - `migrations/` - app migrations (`veap make:migration`).
 
 ## Critical Contracts (do not break)

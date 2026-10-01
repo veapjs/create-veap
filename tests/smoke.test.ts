@@ -94,7 +94,6 @@ d("create-veap smoke (full pipeline)", () => {
     expect(fs.existsSync(path.join(projectDir, "lib", "veap.ts"))).toBe(true);
     expect(fs.existsSync(path.join(projectDir, "proxy.ts"))).toBe(true);
     expect(fs.existsSync(path.join(projectDir, "plugins"))).toBe(true);
-    expect(fs.existsSync(path.join(projectDir, "templates"))).toBe(true);
 
     // Agent knowledge ships with the project.
     const agents = fs.readFileSync(path.join(projectDir, "AGENTS.md"), "utf-8");
