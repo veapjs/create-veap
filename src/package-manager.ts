@@ -241,11 +241,7 @@ export function applyPackageManager(
     // undefined in package.json to avoid a shadowing duplicate). Written
     // only when missing - an existing one is the source of truth.
     if (!fs.existsSync(pnpmWorkspace)) {
-      fs.writeFileSync(
-        pnpmWorkspace,
-        'packages:\n  - "plugins/*"\n',
-        "utf-8",
-      );
+      fs.writeFileSync(pnpmWorkspace, 'packages:\n  - "plugins/*"\n', "utf-8");
     }
   } else {
     pkg.workspaces = ["plugins/*"];
