@@ -54,14 +54,10 @@ d("create-veap smoke (full pipeline)", () => {
 
   it("kept the CNA boilerplate", () => {
     expect(fs.existsSync(path.join(projectDir, "tsconfig.json"))).toBe(true);
-    expect(fs.existsSync(path.join(projectDir, "postcss.config.mjs"))).toBe(
-      true,
-    );
+    expect(fs.existsSync(path.join(projectDir, "postcss.config.mjs"))).toBe(true);
     expect(fs.existsSync(path.join(projectDir, ".git"))).toBe(true);
 
-    const pkg = JSON.parse(
-      fs.readFileSync(path.join(projectDir, "package.json"), "utf-8"),
-    );
+    const pkg = JSON.parse(fs.readFileSync(path.join(projectDir, "package.json"), "utf-8"));
     expect(pkg.name).toBe(PROJECT);
     expect(pkg.dependencies.next).toBeDefined();
     expect(pkg.dependencies.react).toBeDefined();
@@ -72,25 +68,16 @@ d("create-veap smoke (full pipeline)", () => {
     // collide with the optional catch-all route.
     expect(fs.existsSync(path.join(projectDir, "app", "page.tsx"))).toBe(false);
 
-    const layout = fs.readFileSync(
-      path.join(projectDir, "app", "layout.tsx"),
-      "utf-8",
-    );
+    const layout = fs.readFileSync(path.join(projectDir, "app", "layout.tsx"), "utf-8");
     expect(layout).toContain("force-dynamic");
     expect(layout).toContain("@veap/framework");
     // Session helpers come from the core auth entry, not from lib/veap.
     expect(layout).toContain("@veap/framework/auth/server");
 
-    expect(
-      fs.existsSync(
-        path.join(projectDir, "app", "[[...catchAll]]", "page.tsx"),
-      ),
-    ).toBe(true);
-    expect(
-      fs.existsSync(
-        path.join(projectDir, "app", "api", "[...catchAll]", "route.ts"),
-      ),
-    ).toBe(true);
+    expect(fs.existsSync(path.join(projectDir, "app", "[[...catchAll]]", "page.tsx"))).toBe(true);
+    expect(fs.existsSync(path.join(projectDir, "app", "api", "[...catchAll]", "route.ts"))).toBe(
+      true,
+    );
     expect(fs.existsSync(path.join(projectDir, "lib", "veap.ts"))).toBe(true);
     expect(fs.existsSync(path.join(projectDir, "proxy.ts"))).toBe(true);
     expect(fs.existsSync(path.join(projectDir, "plugins"))).toBe(true);
@@ -101,17 +88,12 @@ d("create-veap smoke (full pipeline)", () => {
     expect(agents).toContain("ENCRYPTION_KEY");
     expect(agents).toContain("plugins.gen.ts");
 
-    const nextConfig = fs.readFileSync(
-      path.join(projectDir, "next.config.ts"),
-      "utf-8",
-    );
+    const nextConfig = fs.readFileSync(path.join(projectDir, "next.config.ts"), "utf-8");
     expect(nextConfig).toContain("transpilePackages");
   });
 
   it("mutated package.json, .env and .gitignore", () => {
-    const pkg = JSON.parse(
-      fs.readFileSync(path.join(projectDir, "package.json"), "utf-8"),
-    );
+    const pkg = JSON.parse(fs.readFileSync(path.join(projectDir, "package.json"), "utf-8"));
     expect(pkg.dependencies["@veap/framework"]).toBe("latest");
     expect(pkg.dependencies["@veap/ui"]).toBe("latest");
     // Linting comes from CNA's own ESLint setup, not from a veap pin.
@@ -126,16 +108,11 @@ d("create-veap smoke (full pipeline)", () => {
     expect(Buffer.from(key!, "base64")).toHaveLength(16);
     expect(env).toContain("DATABASE_URL=");
 
-    const gitignore = fs.readFileSync(
-      path.join(projectDir, ".gitignore"),
-      "utf-8",
-    );
+    const gitignore = fs.readFileSync(path.join(projectDir, ".gitignore"), "utf-8");
     expect(gitignore).toContain("storage/");
 
     // The veap overlay must not ship a linter config over the CNA one.
     expect(fs.existsSync(path.join(projectDir, "biome.json"))).toBe(false);
-    expect(fs.existsSync(path.join(projectDir, "eslint.config.mjs"))).toBe(
-      true,
-    );
+    expect(fs.existsSync(path.join(projectDir, "eslint.config.mjs"))).toBe(true);
   });
 });

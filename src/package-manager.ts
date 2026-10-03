@@ -5,12 +5,7 @@ import readline from "node:readline";
 
 export type PackageManager = "pnpm" | "npm" | "yarn" | "bun";
 
-export const PACKAGE_MANAGERS: PackageManager[] = [
-  "pnpm",
-  "npm",
-  "yarn",
-  "bun",
-];
+export const PACKAGE_MANAGERS: PackageManager[] = ["pnpm", "npm", "yarn", "bun"];
 
 /** Versions pinned into the generated project's `packageManager` field. */
 const PINNED_VERSIONS: Partial<Record<PackageManager, string>> = {
@@ -56,10 +51,7 @@ export function detectPackageManager(dir: string): PackageManagerDetection {
       const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
       if (typeof pkg.packageManager === "string") {
         // Handles both "pnpm@11.9.0" and "pnpm@https://..." forms
-        const name = pkg.packageManager.slice(
-          0,
-          pkg.packageManager.indexOf("@"),
-        );
+        const name = pkg.packageManager.slice(0, pkg.packageManager.indexOf("@"));
         if (isPackageManager(name)) {
           return { pm: name, source: "field", detail: pkg.packageManager };
         }
@@ -77,9 +69,7 @@ export function detectPackageManager(dir: string): PackageManagerDetection {
     return {
       pm: "pnpm",
       source: "lockfile",
-      detail: `multiple lockfiles found: ${found
-        .map((l) => l.file)
-        .join(", ")}`,
+      detail: `multiple lockfiles found: ${found.map((l) => l.file).join(", ")}`,
     };
   }
   if (found.length === 1) {
@@ -155,11 +145,7 @@ export async function promptPackageManager(
           return;
         }
         const asNumber = Number.parseInt(value, 10);
-        if (
-          String(asNumber) === value &&
-          asNumber >= 1 &&
-          asNumber <= PACKAGE_MANAGERS.length
-        ) {
+        if (String(asNumber) === value && asNumber >= 1 && asNumber <= PACKAGE_MANAGERS.length) {
           finish(PACKAGE_MANAGERS[asNumber - 1]);
           return;
         }
@@ -184,9 +170,7 @@ export async function promptPackageManager(
  * on a prompt) → interactive prompt (TTY only) → auto-detected default
  * (non-TTY, CI).
  */
-export async function resolvePackageManager(options?: {
-  pm?: string;
-}): Promise<PackageManager> {
+export async function resolvePackageManager(options?: { pm?: string }): Promise<PackageManager> {
   const detection = detectPackageManager(process.cwd());
 
   if (options?.pm) {
@@ -220,10 +204,7 @@ export async function resolvePackageManager(options?: {
  * - npm/bun: removes `packageManager` (not managed by corepack), switches
  *   workspace definition to the `workspaces` field in package.json
  */
-export function applyPackageManager(
-  projectDir: string,
-  pm: PackageManager,
-): void {
+export function applyPackageManager(projectDir: string, pm: PackageManager): void {
   const pkgPath = path.join(projectDir, "package.json");
   if (!fs.existsSync(pkgPath)) return;
 

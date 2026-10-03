@@ -2,22 +2,22 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import ora from "ora";
-import { processStubs } from "../utils.js";
-import {
-  applyPackageManager,
-  pmInstall,
-  pmRunCommand,
-  resolvePackageManager,
-} from "../package-manager.js";
-import { scaffoldNextApp } from "../scaffold.js";
-import { promptConfirm, promptProjectName } from "../prompts.js";
-import { parseProjectName, projectNameError } from "../project-name.js";
 import {
   appendGitignore,
   clearAppDirectory,
   injectVeapDependencies,
   writeEnvFile,
 } from "../mutate.js";
+import {
+  applyPackageManager,
+  pmInstall,
+  pmRunCommand,
+  resolvePackageManager,
+} from "../package-manager.js";
+import { parseProjectName, projectNameError } from "../project-name.js";
+import { promptConfirm, promptProjectName } from "../prompts.js";
+import { scaffoldNextApp } from "../scaffold.js";
+import { processStubs } from "../utils.js";
 
 export async function initProject(
   name?: string,
@@ -85,10 +85,7 @@ export async function initProject(
     // (veap layout, router catch-all, api pipeline, storage route, bootstrap,
     // veap next.config...). Overlay files overwrite CNA counterparts.
     const overlaySpin = ora("Applying Veap overlay files...").start();
-    const stubsDir = path.resolve(
-      path.dirname(fileURLToPath(import.meta.url)),
-      overlayFolder,
-    );
+    const stubsDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), overlayFolder);
     processStubs(stubsDir, destDir, variables);
     overlaySpin.succeed("Veap overlay applied.");
 
@@ -125,16 +122,12 @@ export async function initProject(
 
     // ---- 8. Single dependency install, after all mutations.
     if (!options?.skipInstall) {
-      const spinner = ora(
-        `📦 Installing dependencies (${pm} install)...`,
-      ).start();
+      const spinner = ora(`📦 Installing dependencies (${pm} install)...`).start();
       try {
         pmInstall(pm, destDir);
         spinner.succeed("Dependencies installed.");
       } catch (_err) {
-        spinner.fail(
-          `Failed to install dependencies automatically. Run ${pm} install manually.`,
-        );
+        spinner.fail(`Failed to install dependencies automatically. Run ${pm} install manually.`);
       }
     }
 

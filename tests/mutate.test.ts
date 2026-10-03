@@ -11,10 +11,7 @@ import {
   injectVeapDependencies,
   writeEnvFile,
 } from "../src/mutate.js";
-import {
-  buildCreateNextAppCommand,
-  sanitizeProjectName,
-} from "../src/scaffold.js";
+import { buildCreateNextAppCommand, sanitizeProjectName } from "../src/scaffold.js";
 
 /** Decodes base64 the same way @veap/framework validates ENCRYPTION_KEY. */
 function decodedKeyLength(base64: string): number {
@@ -40,10 +37,7 @@ afterAll(() => {
   }
 });
 
-const STUBS_DIR = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "../stubs",
-);
+const STUBS_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../stubs");
 
 const readPkg = (dir: string) =>
   JSON.parse(fs.readFileSync(path.join(dir, "package.json"), "utf-8"));
@@ -140,9 +134,7 @@ describe("buildEnvFile", () => {
   });
 
   it("defaults DATABASE_URL to a local sqlite file", () => {
-    expect(buildEnvFile()).toContain(
-      'DATABASE_URL="sqlite:./storage/veap.sqlite"',
-    );
+    expect(buildEnvFile()).toContain('DATABASE_URL="sqlite:./storage/veap.sqlite"');
   });
 });
 
@@ -281,11 +273,7 @@ describe("overlay stubs completeness", () => {
   });
 
   it("no stub re-duplicates CNA boilerplate (tsconfig/postcss/package.json)", () => {
-    for (const removed of [
-      "tsconfig.json.stub",
-      "postcss.config.mjs.stub",
-      "package.json.stub",
-    ]) {
+    for (const removed of ["tsconfig.json.stub", "postcss.config.mjs.stub", "package.json.stub"]) {
       expect(
         fs.existsSync(path.join(STUBS_DIR, "overlay-full", removed)),
         `overlay-full/${removed} should not exist (owned by create-next-app)`,

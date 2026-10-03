@@ -16,10 +16,7 @@ import { projectNameError } from "./project-name.js";
  * npm names (`@scope/name` - the folder becomes the base name). On EOF /
  * non-TTY resolves to the default immediately.
  */
-export function promptProjectName(
-  defaultName: string,
-  cwd: string,
-): Promise<string> {
+export function promptProjectName(defaultName: string, cwd: string): Promise<string> {
   if (!process.stdin.isTTY) {
     return Promise.resolve(defaultName);
   }
@@ -69,10 +66,7 @@ export function promptProjectName(
  * Yes/no confirmation. Accepts y/yes/true (case-insensitive); empty input
  * takes the default. On EOF / non-TTY resolves to the default.
  */
-export function promptConfirm(
-  question: string,
-  defaultValue: boolean,
-): Promise<boolean> {
+export function promptConfirm(question: string, defaultValue: boolean): Promise<boolean> {
   if (!process.stdin.isTTY) {
     return Promise.resolve(defaultValue);
   }
