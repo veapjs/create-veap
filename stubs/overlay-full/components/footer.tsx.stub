@@ -1,0 +1,25 @@
+import Link from "next/link";
+
+export function Footer() {
+  return (
+    <footer className="w-full border-t bg-muted/40 py-10 mt-16 text-sm text-muted-foreground">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6">
+        <div className="flex flex-col items-center gap-1 sm:items-start">
+          <p className="font-semibold text-foreground">Veap Application</p>
+          <p className="text-xs">
+            Powered by Next.js 16 App Router & @veap/framework modular architecture.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-6 text-xs">
+          <Link href="/" className="hover:underline">
+            Home
+          </Link>
+          <Link href="/app" className="hover:underline">
+            Panel
+          </Link>
+        </div>
+      </div>
+    </footer>
+  );
+}

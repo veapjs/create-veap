@@ -261,6 +261,8 @@ describe("overlay stubs completeness", () => {
     "app/layout.tsx.stub",
     "app/not-found.tsx.stub",
     "app/storage/[...path]/route.ts.stub",
+    "components/footer.tsx.stub",
+    "components/navbar.tsx.stub",
     "components/site-layout.tsx.stub",
     "lib/plugins.gen.ts.stub",
     "lib/veap.ts.stub",
