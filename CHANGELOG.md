@@ -1,5 +1,16 @@
 # create-veap
 
+## 0.3.0
+
+### Minor Changes
+
+- feat: add declarative site layout stubs and (site) route group
+
+  - Added `components/site-layout.tsx.stub` with modular slots (`ExtensionPoint`).
+  - Added `app/(site)/layout.tsx.stub` for native public routes.
+  - Configured `.withSiteLayout(SiteLayout)` in `lib/veap.ts.stub`.
+  - Updated test suites verifying full overlay completeness.
+
 ## 0.2.0
 
 ### Minor Changes

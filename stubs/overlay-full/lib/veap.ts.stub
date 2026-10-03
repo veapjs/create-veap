@@ -3,6 +3,7 @@ import { Application } from "@veap/framework/core/server";
 
 import { appMigrations } from "../migrations";
 import { plugins } from "./plugins.gen";
+import { SiteLayout } from "../components/site-layout";
 
 export const app = Application.configure()
   .withDatabase()
@@ -11,6 +12,7 @@ export const app = Application.configure()
   .withCommunication()
   .withIntl()
   .withRouter()
+  .withSiteLayout(SiteLayout)
   .withSettings()
   .withMigrations(appMigrations)
   .withPlugins(plugins)

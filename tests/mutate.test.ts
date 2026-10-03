@@ -253,6 +253,7 @@ describe("sanitizeProjectName", () => {
 describe("overlay stubs completeness", () => {
   const FULL_OVERLAY = [
     "AGENTS.md.stub",
+    "app/(site)/layout.tsx.stub",
     "app/[[...catchAll]]/page.tsx.stub",
     "app/api/[...catchAll]/route.ts.stub",
     "app/error.tsx.stub",
@@ -260,6 +261,7 @@ describe("overlay stubs completeness", () => {
     "app/layout.tsx.stub",
     "app/not-found.tsx.stub",
     "app/storage/[...path]/route.ts.stub",
+    "components/site-layout.tsx.stub",
     "lib/plugins.gen.ts.stub",
     "lib/veap.ts.stub",
     "migrations/index.ts.stub",

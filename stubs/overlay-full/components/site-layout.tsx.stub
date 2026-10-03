@@ -1,0 +1,16 @@
+import { ExtensionPoint } from "@veap/framework/plugins/server";
+import type { ReactNode } from "react";
+
+export function SiteLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="bg-background relative min-h-screen flex flex-col justify-between">
+      {/* App Shell Slot for Navbar: single mode resolves plugin with highest priority */}
+      <ExtensionPoint target="app" point="navbar" mode="single" />
+
+      <main className="flex-1 w-full">{children}</main>
+
+      {/* App Shell Slot for Footer */}
+      <ExtensionPoint target="app" point="footer" mode="single" />
+    </div>
+  );
+}
