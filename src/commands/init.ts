@@ -85,7 +85,10 @@ export async function initProject(
     // (veap layout, router catch-all, api pipeline, storage route, bootstrap,
     // veap next.config...). Overlay files overwrite CNA counterparts.
     const overlaySpin = ora("Applying Veap overlay files...").start();
-    const stubsDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), overlayFolder);
+    const stubsDir = path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      overlayFolder,
+    );
     processStubs(stubsDir, destDir, variables);
     overlaySpin.succeed("Veap overlay applied.");
 
@@ -122,12 +125,16 @@ export async function initProject(
 
     // ---- 8. Single dependency install, after all mutations.
     if (!options?.skipInstall) {
-      const spinner = ora(`📦 Installing dependencies (${pm} install)...`).start();
+      const spinner = ora(
+        `📦 Installing dependencies (${pm} install)...`,
+      ).start();
       try {
         pmInstall(pm, destDir);
         spinner.succeed("Dependencies installed.");
       } catch (_err) {
-        spinner.fail(`Failed to install dependencies automatically. Run ${pm} install manually.`);
+        spinner.fail(
+          `Failed to install dependencies automatically. Run ${pm} install manually.`,
+        );
       }
     }
 

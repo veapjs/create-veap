@@ -33,7 +33,12 @@ describe("detectPackageManager", () => {
   });
 
   it("honors the packageManager field first", () => {
-    for (const field of ["pnpm@11.9.0", "yarn@4.9.2", "npm@10.9.0", "bun@1.2.0"]) {
+    for (const field of [
+      "pnpm@11.9.0",
+      "yarn@4.9.2",
+      "npm@10.9.0",
+      "bun@1.2.0",
+    ]) {
       const pm = field.split("@")[0] as PackageManager;
       const detection = detectPackageManager(
         makeDir({ "package.json": JSON.stringify({ packageManager: field }) }),
@@ -71,7 +76,9 @@ describe("detectPackageManager", () => {
   });
 
   it("prefers pnpm when lockfiles conflict", () => {
-    const detection = detectPackageManager(makeDir({ "package-lock.json": "", "yarn.lock": "" }));
+    const detection = detectPackageManager(
+      makeDir({ "package-lock.json": "", "yarn.lock": "" }),
+    );
     expect(detection.pm).toBe("pnpm");
     expect(detection.detail).toContain("multiple lockfiles found");
   });
@@ -88,7 +95,9 @@ describe("detectPackageManager", () => {
   });
 
   it("falls back to the default when package.json is malformed and has no lockfiles", () => {
-    const detection = detectPackageManager(makeDir({ "package.json": "{ not json" }));
+    const detection = detectPackageManager(
+      makeDir({ "package.json": "{ not json" }),
+    );
     expect(detection).toEqual({ pm: "pnpm", source: "default" });
   });
 });
@@ -106,7 +115,9 @@ describe("applyPackageManager", () => {
       "pnpm-workspace.yaml": "packages:\n  - plugins/*\n",
     });
     applyPackageManager(dir, "pnpm");
-    const pkg = JSON.parse(fs.readFileSync(path.join(dir, "package.json"), "utf-8"));
+    const pkg = JSON.parse(
+      fs.readFileSync(path.join(dir, "package.json"), "utf-8"),
+    );
     expect(pkg.packageManager).toBe("pnpm@11.9.0");
     expect(pkg.workspaces).toBeUndefined();
     expect(fs.existsSync(path.join(dir, "pnpm-workspace.yaml"))).toBe(true);
@@ -116,14 +127,19 @@ describe("applyPackageManager", () => {
   it("writes pnpm-workspace.yaml when missing (fresh CNA scaffolds)", () => {
     const dir = scaffold();
     applyPackageManager(dir, "pnpm");
-    const content = fs.readFileSync(path.join(dir, "pnpm-workspace.yaml"), "utf-8");
+    const content = fs.readFileSync(
+      path.join(dir, "pnpm-workspace.yaml"),
+      "utf-8",
+    );
     expect(content).toContain('"plugins/*"');
   });
 
   it("switches npm projects to the workspaces field and drops packageManager", () => {
     const dir = scaffold({ "pnpm-workspace.yaml": "packages:\n" });
     applyPackageManager(dir, "npm");
-    const pkg = JSON.parse(fs.readFileSync(path.join(dir, "package.json"), "utf-8"));
+    const pkg = JSON.parse(
+      fs.readFileSync(path.join(dir, "package.json"), "utf-8"),
+    );
     expect(pkg.packageManager).toBeUndefined();
     expect(pkg.workspaces).toEqual(["plugins/*"]);
     expect(fs.existsSync(path.join(dir, "pnpm-workspace.yaml"))).toBe(false);
@@ -133,7 +149,9 @@ describe("applyPackageManager", () => {
   it("configures yarn berry with node-modules linker", () => {
     const dir = scaffold({ "pnpm-workspace.yaml": "packages:\n" });
     applyPackageManager(dir, "yarn");
-    const pkg = JSON.parse(fs.readFileSync(path.join(dir, "package.json"), "utf-8"));
+    const pkg = JSON.parse(
+      fs.readFileSync(path.join(dir, "package.json"), "utf-8"),
+    );
     expect(pkg.packageManager).toBe("yarn@4.9.2");
     expect(pkg.workspaces).toEqual(["plugins/*"]);
     expect(fs.existsSync(path.join(dir, "pnpm-workspace.yaml"))).toBe(false);
@@ -144,7 +162,9 @@ describe("applyPackageManager", () => {
   it("uses the workspaces field for bun without a packageManager pin", () => {
     const dir = scaffold({ "pnpm-workspace.yaml": "packages:\n" });
     applyPackageManager(dir, "bun");
-    const pkg = JSON.parse(fs.readFileSync(path.join(dir, "package.json"), "utf-8"));
+    const pkg = JSON.parse(
+      fs.readFileSync(path.join(dir, "package.json"), "utf-8"),
+    );
     expect(pkg.packageManager).toBeUndefined();
     expect(pkg.workspaces).toEqual(["plugins/*"]);
     expect(fs.existsSync(path.join(dir, "pnpm-workspace.yaml"))).toBe(false);

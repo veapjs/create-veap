@@ -3,7 +3,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import ora from "ora";
 
-export async function initDockerConfig(targetDir?: string, pm?: "pnpm" | "npm" | "yarn" | "bun") {
+export async function initDockerConfig(
+  targetDir?: string,
+  pm?: "pnpm" | "npm" | "yarn" | "bun",
+) {
   const rootDir = targetDir || process.cwd();
   console.log(`\n🐳 Initializing Docker configuration in ${rootDir}...`);
 
@@ -12,11 +15,15 @@ export async function initDockerConfig(targetDir?: string, pm?: "pnpm" | "npm" |
   const pkgPath = path.join(rootDir, "package.json");
   if (fs.existsSync(pkgPath)) {
     try {
-      projectName = JSON.parse(fs.readFileSync(pkgPath, "utf-8")).name || projectName;
+      projectName =
+        JSON.parse(fs.readFileSync(pkgPath, "utf-8")).name || projectName;
     } catch (_) {}
   }
 
-  const stubsDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../stubs/docker");
+  const stubsDir = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "../../stubs/docker",
+  );
 
   if (!fs.existsSync(stubsDir)) {
     console.error(`Error: Missing Docker stubs directory at ${stubsDir}`);

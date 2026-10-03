@@ -56,9 +56,13 @@ describe("parseProjectName", () => {
 
   it("rejects parts starting with . or _", () => {
     // Unscoped: the charset rule (must start with a letter/digit) fires first.
-    expect(() => parseProjectName(".hidden")).toThrow(/must start with a letter or digit/i);
+    expect(() => parseProjectName(".hidden")).toThrow(
+      /must start with a letter or digit/i,
+    );
     // Scoped: the name part passes the charset regex, so the npm rule fires.
-    expect(() => parseProjectName("@acme/_internal")).toThrow(/"\."\s*or\s*"_"/i);
+    expect(() => parseProjectName("@acme/_internal")).toThrow(
+      /"\."\s*or\s*"_"/i,
+    );
   });
 
   it("rejects unscoped names that are not filesystem-safe", () => {
@@ -67,7 +71,9 @@ describe("parseProjectName", () => {
   });
 
   it("rejects reserved scopes (framework namespace and platform tooling)", () => {
-    expect(() => parseProjectName("@veap/my-app")).toThrow(/"@veap" is reserved/);
+    expect(() => parseProjectName("@veap/my-app")).toThrow(
+      /"@veap" is reserved/,
+    );
     expect(() => parseProjectName("@next/my-app")).toThrow(/reserved/);
     expect(() => parseProjectName("@react/my-app")).toThrow(/reserved/);
     expect(() => parseProjectName("@vercel/my-app")).toThrow(/reserved/);
@@ -82,7 +88,9 @@ describe("parseProjectName", () => {
       "react",
       "react-dom",
     ]) {
-      expect(() => parseProjectName(reserved)).toThrow(new RegExp(`"${reserved}" is reserved`));
+      expect(() => parseProjectName(reserved)).toThrow(
+        new RegExp(`"${reserved}" is reserved`),
+      );
     }
   });
 

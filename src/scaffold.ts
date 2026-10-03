@@ -108,7 +108,11 @@ export function scaffoldNextApp(name: string, opts: ScaffoldOptions): string {
         } catch {}
       }
 
-      const fallbackCommand = buildCreateNextAppCommand(projectName, opts, CNA_RUNNERS.npm);
+      const fallbackCommand = buildCreateNextAppCommand(
+        projectName,
+        opts,
+        CNA_RUNNERS.npm,
+      );
       execSync(fallbackCommand, { cwd: opts.cwd, stdio: "inherit" });
     } else {
       throw primaryErr;

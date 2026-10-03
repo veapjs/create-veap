@@ -43,7 +43,10 @@ export function clearAppDirectory(projectDir: string): void {
  * `packageName` overrides the generated package name (CNA derives it from
  * the folder, which loses the scope of names like `@scope/name`).
  */
-export function injectVeapDependencies(projectDir: string, packageName?: string): void {
+export function injectVeapDependencies(
+  projectDir: string,
+  packageName?: string,
+): void {
   const pkgPath = path.join(projectDir, "package.json");
   if (!fs.existsSync(pkgPath)) {
     throw new Error(`package.json not found in ${projectDir}`);
@@ -127,13 +130,20 @@ const GITIGNORE_ENTRIES = ["public/storage/", "storage/", "**/*/dist"];
  */
 export function appendGitignore(projectDir: string): void {
   const gitignorePath = path.join(projectDir, ".gitignore");
-  const existing = fs.existsSync(gitignorePath) ? fs.readFileSync(gitignorePath, "utf-8") : "";
+  const existing = fs.existsSync(gitignorePath)
+    ? fs.readFileSync(gitignorePath, "utf-8")
+    : "";
 
   const present = new Set(existing.split("\n").map((line) => line.trim()));
   const missing = GITIGNORE_ENTRIES.filter((entry) => !present.has(entry));
   if (missing.length === 0) return;
 
-  const block = ["", "# Veap additions (appended by create-veap)", ...missing, ""].join("\n");
+  const block = [
+    "",
+    "# Veap additions (appended by create-veap)",
+    ...missing,
+    "",
+  ].join("\n");
 
   const separator = existing.length > 0 && !existing.endsWith("\n") ? "\n" : "";
 

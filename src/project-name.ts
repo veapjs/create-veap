@@ -14,7 +14,16 @@ import path from "node:path";
  */
 
 /** Scopes that may never be used for generated projects. */
-const RESERVED_SCOPES = ["veap", "next", "react", "vercel", "npm", "node", "typescript", "types"];
+const RESERVED_SCOPES = [
+  "veap",
+  "next",
+  "react",
+  "vercel",
+  "npm",
+  "node",
+  "typescript",
+  "types",
+];
 
 /** Unscoped package names that may never be used for generated projects. */
 const RESERVED_NAMES = [
@@ -74,7 +83,8 @@ export function parseProjectName(input: string): ParsedProjectName {
     const scope = match[1];
     const name = match[2];
 
-    const error = partError(scope, `Scope "${scope}"`) ?? partError(name, `Name "${name}"`);
+    const error =
+      partError(scope, `Scope "${scope}"`) ?? partError(name, `Name "${name}"`);
     if (error) throw new Error(error);
 
     if (RESERVED_SCOPES.includes(scope)) {
@@ -102,7 +112,9 @@ export function parseProjectName(input: string): ParsedProjectName {
   if (error) throw new Error(error);
 
   if (RESERVED_NAMES.includes(value)) {
-    throw new Error(`The name "${value}" is reserved and cannot be used for generated projects.`);
+    throw new Error(
+      `The name "${value}" is reserved and cannot be used for generated projects.`,
+    );
   }
 
   return { scope: null, name: value, folder: value, packageName: value };

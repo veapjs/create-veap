@@ -5,7 +5,10 @@ import { initProject } from "./commands/init.js";
 const cli = cac("create-veap");
 
 cli
-  .command("[name]", "Initialize a new Veap project (asks for details when omitted)")
+  .command(
+    "[name]",
+    "Initialize a new Veap project (asks for details when omitted)",
+  )
   .option("--docker", "Initialize Docker configuration")
   .option("--skip-install", "Skip dependencies installation")
   .option(
