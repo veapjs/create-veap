@@ -132,7 +132,7 @@ describe("buildEnvFile", () => {
     const env = buildEnvFile();
     const match = env.match(/ENCRYPTION_KEY="([^"]+)"/);
     expect(match).not.toBeNull();
-    expect(decodedKeyLength(match![1])).toBe(16);
+    expect(decodedKeyLength(match![1]!)).toBe(16);
   });
 
   it("generates a different key on every call", () => {
@@ -253,6 +253,7 @@ describe("sanitizeProjectName", () => {
 describe("overlay stubs completeness", () => {
   const FULL_OVERLAY = [
     "AGENTS.md.stub",
+    "README.md.stub",
     "app/(site)/layout.tsx.stub",
     "app/[[...catchAll]]/page.tsx.stub",
     "app/api/[...catchAll]/route.ts.stub",
@@ -275,7 +276,7 @@ describe("overlay stubs completeness", () => {
     for (const rel of FULL_OVERLAY) {
       expect(
         fs.existsSync(path.join(STUBS_DIR, "overlay-full", rel)),
-        `missing overlay-full/${rel}`,
+        `missing overlay-full/${rel}` as const,
       ).toBe(true);
     }
   });

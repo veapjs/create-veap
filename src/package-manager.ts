@@ -43,6 +43,42 @@ const isPackageManager = (value: string): value is PackageManager =>
   (PACKAGE_MANAGERS as string[]).includes(value);
 
 /**
+ * Detects the package manager currently executing the process.
+ *
+ * Inspects:
+ * 1. `npm_config_user_agent` (set when invoked via npx, bunx, pnpm dlx, yarn create)
+ * 2. `process.versions.bun` (running directly inside Bun runtime)
+ * 3. `npm_execpath` (path containing the binary name)
+ */
+export function detectRunningPackageManager(
+  env: NodeJS.ProcessEnv = process.env,
+  versions: NodeJS.ProcessVersions = process.versions,
+): PackageManager | null {
+  const userAgent = env.npm_config_user_agent;
+  if (userAgent) {
+    if (userAgent.startsWith("pnpm")) return "pnpm";
+    if (userAgent.startsWith("bun")) return "bun";
+    if (userAgent.startsWith("yarn")) return "yarn";
+    if (userAgent.startsWith("npm")) return "npm";
+  }
+
+  // Running directly under Bun runtime (e.g. `bun create veap` or `bunx create-veap`)
+  if (typeof (versions as any)?.bun === "string") {
+    return "bun";
+  }
+
+  const execPath = env.npm_execpath;
+  if (execPath) {
+    if (execPath.includes("pnpm")) return "pnpm";
+    if (execPath.includes("bun")) return "bun";
+    if (execPath.includes("yarn")) return "yarn";
+    if (execPath.includes("npm")) return "npm";
+  }
+
+  return null;
+}
+
+/**
  * Detects the package manager to default to by inspecting `dir` (usually the
  * directory the scaffolding command was launched from).
  *
@@ -80,8 +116,9 @@ export function detectPackageManager(dir: string): PackageManagerDetection {
       detail: `multiple lockfiles found: ${found.map((l) => l.file).join(", ")}`,
     };
   }
-  if (found.length === 1) {
-    return { pm: found[0].pm, source: "lockfile", detail: found[0].file };
+  const first = found[0];
+  if (found.length === 1 && first) {
+    return { pm: first.pm, source: "lockfile", detail: first.file };
   }
 
   // 3. Framework default
@@ -102,10 +139,7 @@ function formatDetection(d: PackageManagerDetection): string {
  * Interactive numbered-choice prompt rendered on readline (no external
  * prompt library, matching the rest of this CLI).
  *
- * The detected package manager is listed first as the default; pressing
- * Enter accepts it. Accepts a number (1-4) or a name (`pnpm`, `npm`,
- * `yarn`, `bun`). On EOF / closed stdin (piped input, CI) resolves to the
- * detected default instead of hanging.
+ * Kept as a fallback helper.
  */
 export async function promptPackageManager(
   detection: PackageManagerDetection,
@@ -158,8 +192,11 @@ export async function promptPackageManager(
           asNumber >= 1 &&
           asNumber <= PACKAGE_MANAGERS.length
         ) {
-          finish(PACKAGE_MANAGERS[asNumber - 1]);
-          return;
+          const chosen = PACKAGE_MANAGERS[asNumber - 1];
+          if (chosen) {
+            finish(chosen);
+            return;
+          }
         }
         if (isPackageManager(value)) {
           finish(value);
@@ -175,21 +212,58 @@ export async function promptPackageManager(
   });
 }
 
+export interface ResolvePackageManagerOptions {
+  pm?: string;
+  pnpm?: boolean;
+  bun?: boolean;
+  npm?: boolean;
+  yarn?: boolean;
+  usePnpm?: boolean;
+  useBun?: boolean;
+  useNpm?: boolean;
+  useYarn?: boolean;
+}
+
 /**
  * Resolves the package manager to use for a new project.
  *
- * Order: explicit `--pm <name>` flag (validated hard - scripts must not hang
- * on a prompt) → interactive prompt (TTY only) → auto-detected default
- * (non-TTY, CI).
+ * Priority:
+ * 1. Explicit manager flag: `--pnpm`, `--bun`, `--npm`, `--yarn`
+ * 2. Explicit `--pm <name>` flag
+ * 3. Auto-detected from currently running environment (e.g. `bun create`, `pnpm dlx`, `npx`)
+ * 4. Auto-detected from current directory (packageManager field, lockfiles, or default)
+ *
+ * Automatically resolves without prompting.
  */
-export async function resolvePackageManager(options?: {
-  pm?: string;
-}): Promise<PackageManager> {
-  const detection = detectPackageManager(process.cwd());
+export async function resolvePackageManager(
+  options?: ResolvePackageManagerOptions,
+  cwd: string = process.cwd(),
+): Promise<PackageManager> {
+  // 1. Explicit boolean flags: --pnpm, --bun, --npm, --yarn
+  if (options?.pnpm || options?.usePnpm) {
+    console.log("📦 Using package manager: pnpm (specified via --pnpm flag)");
+    return "pnpm";
+  }
+  if (options?.bun || options?.useBun) {
+    console.log("📦 Using package manager: bun (specified via --bun flag)");
+    return "bun";
+  }
+  if (options?.npm || options?.useNpm) {
+    console.log("📦 Using package manager: npm (specified via --npm flag)");
+    return "npm";
+  }
+  if (options?.yarn || options?.useYarn) {
+    console.log("📦 Using package manager: yarn (specified via --yarn flag)");
+    return "yarn";
+  }
 
+  // 2. Explicit --pm <name> flag
   if (options?.pm) {
     const requested = options.pm.trim().toLowerCase();
     if (isPackageManager(requested)) {
+      console.log(
+        `📦 Using package manager: ${requested} (specified via --pm flag)`,
+      );
       return requested;
     }
     console.error(
@@ -198,14 +272,19 @@ export async function resolvePackageManager(options?: {
     process.exit(1);
   }
 
-  if (!process.stdin.isTTY) {
+  // 3. Auto-detected from currently running execution environment
+  const running = detectRunningPackageManager();
+  if (running) {
     console.log(
-      `📦 Using ${detection.pm} (auto-detected${detection.detail ? `: ${detection.detail}` : ""})`,
+      `📦 Package manager detected: ${running} (from running environment)`,
     );
-    return detection.pm;
+    return running;
   }
 
-  return promptPackageManager(detection);
+  // 4. Auto-detected from directory context or framework default
+  const detection = detectPackageManager(cwd);
+  console.log(formatDetection(detection));
+  return detection.pm;
 }
 
 /**

@@ -12,6 +12,7 @@ import {
   applyPackageManager,
   pmInstall,
   pmRunCommand,
+  type ResolvePackageManagerOptions,
   resolvePackageManager,
 } from "../package-manager.js";
 import { parseProjectName, projectNameError } from "../project-name.js";
@@ -21,10 +22,9 @@ import { processStubs } from "../utils.js";
 
 export async function initProject(
   name?: string,
-  options?: {
+  options?: ResolvePackageManagerOptions & {
     docker?: boolean;
     skipInstall?: boolean;
-    pm?: string;
   },
 ) {
   // ---- Resolve the project name: from the CLI argument or the interactive
@@ -52,9 +52,8 @@ export async function initProject(
     withDocker = await promptConfirm("Include Docker configuration?", false);
   }
 
-  // Resolve the package manager up front so the prompt runs before any
-  // scaffolding starts (cleaner UX than asking mid-scaffold).
-  const pm = await resolvePackageManager({ pm: options?.pm });
+  // Resolve the package manager automatically (or from flags)
+  const pm = await resolvePackageManager(options);
 
   const overlayFolder = "../../stubs/overlay-full";
 

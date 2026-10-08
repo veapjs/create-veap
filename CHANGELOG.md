@@ -1,5 +1,13 @@
 # create-veap
 
+## 0.3.1
+
+### Patch Changes
+
+- - Add Turbopack CSS loader support for Next.js 16.4 in overlay-full stub
+  - Add README.md stub to overlay-full with setup instructions, project structure, CLI commands, and documentation links
+  - Automatically detect the running package manager without interactive prompts, and add `--pnpm`, `--bun`, `--npm`, `--yarn` CLI flags
+
 ## 0.3.0
 
 ### Minor Changes

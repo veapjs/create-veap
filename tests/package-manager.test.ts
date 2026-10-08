@@ -5,8 +5,10 @@ import { afterAll, describe, expect, it } from "vitest";
 import {
   applyPackageManager,
   detectPackageManager,
+  detectRunningPackageManager,
   type PackageManager,
   pmRunCommand,
+  resolvePackageManager,
 } from "../src/package-manager.js";
 
 const tmpDirs: string[] = [];
@@ -99,6 +101,99 @@ describe("detectPackageManager", () => {
       makeDir({ "package.json": "{ not json" }),
     );
     expect(detection).toEqual({ pm: "pnpm", source: "default" });
+  });
+});
+
+describe("detectRunningPackageManager", () => {
+  it("detects from npm_config_user_agent", () => {
+    expect(
+      detectRunningPackageManager(
+        { npm_config_user_agent: "pnpm/11.9.0 npm/? node/v22.0.0" } as any,
+        {} as any,
+      ),
+    ).toBe("pnpm");
+    expect(
+      detectRunningPackageManager(
+        { npm_config_user_agent: "bun/1.4.2" } as any,
+        {} as any,
+      ),
+    ).toBe("bun");
+    expect(
+      detectRunningPackageManager(
+        { npm_config_user_agent: "yarn/4.9.2 npm/? node/v22.0.0" } as any,
+        {} as any,
+      ),
+    ).toBe("yarn");
+    expect(
+      detectRunningPackageManager(
+        { npm_config_user_agent: "npm/10.9.0 node/v22.0.0" } as any,
+        {} as any,
+      ),
+    ).toBe("npm");
+  });
+
+  it("detects from process.versions.bun when no user agent is present", () => {
+    expect(
+      detectRunningPackageManager({} as any, { bun: "1.4.2" } as any),
+    ).toBe("bun");
+  });
+
+  it("detects from npm_execpath", () => {
+    expect(
+      detectRunningPackageManager(
+        { npm_execpath: "/usr/local/bin/pnpm" } as any,
+        {} as any,
+      ),
+    ).toBe("pnpm");
+    expect(
+      detectRunningPackageManager(
+        { npm_execpath: "/home/user/.bun/bin/bun" } as any,
+        {} as any,
+      ),
+    ).toBe("bun");
+    expect(
+      detectRunningPackageManager(
+        { npm_execpath: "/usr/local/bin/yarn" } as any,
+        {} as any,
+      ),
+    ).toBe("yarn");
+    expect(
+      detectRunningPackageManager(
+        { npm_execpath: "/usr/local/bin/npm" } as any,
+        {} as any,
+      ),
+    ).toBe("npm");
+  });
+
+  it("returns null when no runtime indicator is present", () => {
+    expect(detectRunningPackageManager({} as any, {} as any)).toBeNull();
+  });
+});
+
+describe("resolvePackageManager", () => {
+  it("honors --pnpm flag even when another manager might be default", async () => {
+    const pm = await resolvePackageManager({ pnpm: true });
+    expect(pm).toBe("pnpm");
+  });
+
+  it("honors --bun flag", async () => {
+    const pm = await resolvePackageManager({ bun: true });
+    expect(pm).toBe("bun");
+  });
+
+  it("honors --npm flag", async () => {
+    const pm = await resolvePackageManager({ npm: true });
+    expect(pm).toBe("npm");
+  });
+
+  it("honors --yarn flag", async () => {
+    const pm = await resolvePackageManager({ yarn: true });
+    expect(pm).toBe("yarn");
+  });
+
+  it("honors --pm flag", async () => {
+    const pm = await resolvePackageManager({ pm: "yarn" });
+    expect(pm).toBe("yarn");
   });
 });
 

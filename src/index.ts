@@ -10,11 +10,16 @@ cli
     "Initialize a new Veap project (asks for details when omitted)",
   )
   .option("--docker", "Initialize Docker configuration")
+  .option("--no-docker", "Skip Docker configuration")
   .option("--skip-install", "Skip dependencies installation")
   .option(
     "--pm <manager>",
     "Package manager to use: pnpm, npm, yarn or bun (auto-detected when omitted)",
   )
+  .option("--pnpm, --use-pnpm", "Use pnpm as package manager")
+  .option("--bun, --use-bun", "Use bun as package manager")
+  .option("--npm, --use-npm", "Use npm as package manager")
+  .option("--yarn, --use-yarn", "Use yarn as package manager")
   .action(
     async (
       name?: string,
@@ -22,6 +27,14 @@ cli
         docker?: boolean;
         skipInstall?: boolean;
         pm?: string;
+        pnpm?: boolean;
+        bun?: boolean;
+        npm?: boolean;
+        yarn?: boolean;
+        usePnpm?: boolean;
+        useBun?: boolean;
+        useNpm?: boolean;
+        useYarn?: boolean;
       },
     ) => {
       await initProject(name, options);

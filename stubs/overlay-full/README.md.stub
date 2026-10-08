@@ -1,0 +1,132 @@
+# {{name}}
+
+A modern full-stack web application built with [Veap](https://veap.pl) and Next.js 16 (App Router & React Server Components).
+
+## What is Veap?
+
+**Veap** is a modular application framework built on top of the Next.js App Router. It combines Next.js frontend flexibility with robust, enterprise-grade backend architectural primitives:
+
+- **Clean Architecture & Service Providers**: Inversion of control container and modular service providers configured in `lib/veap.ts`.
+- **Virtual Routing**: Dynamic route tree serving installed plugin routes and application routes through `app/[[...catchAll]]/page.tsx` and `app/api/[...catchAll]/route.ts`.
+- **Plugin System**: Isolated, composable packages located in `plugins/` with declarative extensions and widgets.
+- **ActiveRecord ORM**: Eloquent-style models and query builder backed by Knex with transactions and migrations.
+- **Authentication & RBAC**: Built-in session management, user models, role-based access control, and password hashing.
+- **Storage & Communication**: Unified file storage drivers and mail transports.
+
+---
+
+## Getting Started
+
+### 1. Requirements
+
+- **Node.js** `>= 22` or **Bun** `>= 1.2`
+- Supported package managers: `bun`, `pnpm`, `npm`, or `yarn`
+
+### 2. Environment Configuration
+
+During project initialization, a default `.env` file is generated with a secure random `ENCRYPTION_KEY` and a local SQLite database configuration:
+
+```bash
+DATABASE_CLIENT=sqlite3
+DATABASE_URL=./storage/veap.sqlite
+ENCRYPTION_KEY=<generated-key>
+```
+
+> **Important**: The application enforces fail-fast verification on `ENCRYPTION_KEY`. Never commit `.env` to version control.
+
+### 3. Run the Development Server
+
+Start the local development server:
+
+```bash
+# Using bun
+bun dev
+
+# Or using pnpm
+pnpm dev
+
+# Or using npm
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to view the application.
+
+---
+
+## Available Scripts
+
+| Command | Description |
+| --- | --- |
+| `bun dev` | Starts the Next.js development server with Turbopack |
+| `bun run build` | Builds the application for production |
+| `bun run start` | Runs the production build |
+| `bun run lint` | Runs ESLint checks |
+
+*(Replace `bun` with `pnpm` or `npm run` depending on your package manager)*
+
+---
+
+## Veap CLI
+
+The `veap` CLI manages plugins, database migrations, and framework components:
+
+```bash
+# Add and register a plugin package
+veap add <plugin-name>
+
+# Scaffold a new workspace plugin in plugins/
+veap make:plugin <plugin-name>
+
+# Create a new database migration
+veap make:migration <migration-name>
+
+# Scaffold a new site layout template
+veap make:template <template-name>
+
+# Re-synchronize and generate lib/plugins.gen.ts
+veap register
+
+# Generate Docker deployment configuration
+veap docker
+```
+
+---
+
+## Project Structure
+
+```
+├── app/
+│   ├── (site)/             # Declarative site layout route group
+│   ├── [[...catchAll]]/    # Veap virtual page router
+│   ├── api/[...catchAll]/  # Veap API pipeline (middlewares, RBAC, auth)
+│   ├── storage/            # Local storage route handler
+│   ├── layout.tsx          # Root layout shell with force-dynamic bootstrap
+│   └── globals.css         # Tailwind CSS styling
+├── components/             # Reusable UI components (SiteLayout, Navbar, Footer)
+├── lib/
+│   ├── veap.ts             # Composition root: Application configuration & bootstrap
+│   └── plugins.gen.ts      # Generated plugin registry (managed by veap register)
+├── migrations/             # Database migrations
+├── plugins/                # Local workspace plugins
+├── storage/                # Local SQLite database & uploaded files
+├── AGENTS.md               # AI coding agent instructions and architectural contracts
+└── next.config.ts          # Next.js configuration with Veap & Turbopack support
+```
+
+---
+
+## Documentation & Resources
+
+Explore the official Veap documentation to learn more about architecture, plugins, and guides:
+
+- **Official Website**: [https://veap.pl](https://veap.pl)
+- **Documentation**: [https://veap.pl/docs](https://veap.pl/docs)
+  - [Getting Started](https://veap.pl/docs/getting-started/introduction)
+  - [Architecture & Fundamentals](https://veap.pl/docs/fundamentals/architecture)
+  - [Virtual Routing & Middleware](https://veap.pl/docs/routing/routing)
+  - [Database & ORM](https://veap.pl/docs/data/database)
+  - [Authentication & RBAC](https://veap.pl/docs/auth)
+  - [Authoring Plugins](https://veap.pl/docs/plugins/creating-plugins)
+  - [CLI Reference](https://veap.pl/docs/reference/cli)
+- **GitHub Repository**: [https://github.com/veapjs/veap](https://github.com/veapjs/veap)
+- **Community Discussions**: [https://github.com/veapjs/veap/discussions](https://github.com/veapjs/veap/discussions)
