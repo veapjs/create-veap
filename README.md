@@ -28,20 +28,22 @@ bunx create-veap my-app
 npx create-veap my-app
 ```
 
-When you omit the project name in an interactive terminal, `create-veap` prompts for a project name and optional Docker configuration.
+When you omit the project name in an interactive terminal, `create-veap` prompts for a project name.
+
+During project creation, `create-veap` asks whether to include optional Docker configuration (`Dockerfile`, `compose.yml`, and `.dockerignore`). You can pass `--docker` or `--no-docker` to bypass the interactive prompt.
 
 ## Command options
 
-| Flag             | Description                                                                  |
-| ---------------- | ---------------------------------------------------------------------------- |
-| `--docker`       | Generate Docker configuration (`Dockerfile`, `compose.yml`, `.dockerignore`). |
-| `--no-docker`    | Skip Docker configuration without prompting.                                |
-| `--skip-install` | Do not run the package manager install step.                                 |
-| `--pm <manager>` | Specify package manager (`bun`, `pnpm`, `npm`, `yarn`).                      |
-| `--pnpm`         | Force pnpm as package manager.                                              |
-| `--bun`          | Force Bun as package manager.                                               |
-| `--npm`          | Force npm as package manager.                                               |
-| `--yarn`         | Force Yarn as package manager.                                              |
+| Flag             | Description                                                                    |
+| ---------------- | ------------------------------------------------------------------------------ |
+| `--docker`       | Generate Docker configuration (`Dockerfile`, `compose.yml`, `.dockerignore`).   |
+| `--no-docker`    | Skip Docker configuration without prompting.                                  |
+| `--skip-install` | Do not run the package manager install step.                                   |
+| `--pm <manager>` | Specify package manager (`bun`, `pnpm`, `npm`, `yarn`).                        |
+| `--pnpm`         | Force pnpm as package manager.                                                |
+| `--bun`          | Force Bun as package manager.                                                 |
+| `--npm`          | Force npm as package manager.                                                 |
+| `--yarn`         | Force Yarn as package manager.                                                |
 
 ### Automatic package manager detection
 

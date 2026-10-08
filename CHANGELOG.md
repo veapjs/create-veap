@@ -1,5 +1,13 @@
 # create-veap
 
+## 0.3.2
+
+### Patch Changes
+
+- - Fix Docker configuration to be interactive/optional when creating a new application without explicit `--docker` or `--no-docker` flags
+  - Add GitHub Actions CI and Release workflows
+  - Add unit test coverage for CLI Docker options parsing
+
 ## 0.3.1
 
 ### Patch Changes
