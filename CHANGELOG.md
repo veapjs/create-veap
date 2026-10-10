@@ -1,5 +1,11 @@
 # create-veap
 
+## 0.3.3
+
+### Patch Changes
+
+- bump(deps): fix typescript version
+
 ## 0.3.2
 
 ### Patch Changes
