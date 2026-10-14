@@ -1,5 +1,18 @@
 # create-veap
 
+## 0.4.0
+
+### Minor Changes
+
+- refactor: remove tests and update project structure
+  
+  - Deleted existing test files for package-manager, project-name, and smoke tests.
+  - Updated tsconfig.json to include src directory and exclude templates.
+  - Added cli.js as entry point for the CLI.
+  - Created vitest binary for easier CLI testing.
+  - Introduced new helper functions for template installation and example option parsing.
+  - Added comprehensive CLI tests to validate command-line arguments and template selection.
+
 ## 0.3.3
 
 ### Patch Changes
