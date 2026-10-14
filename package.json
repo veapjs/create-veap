@@ -19,7 +19,8 @@
   "scripts": {
     "start": "node ./dist/index.js",
     "dev": "bun build --watch",
-    "build": "rimraf dist && cp -r ../../templates templates && rm -rf templates/*/node_modules templates/*/.next templates/*/.cache templates/*/*.tsbuildinfo && (for d in templates/*; do mv $d/.gitignore $d/gitignore || true; done) && tsc ",
+    "compile": "rimraf dist && rm -rf templates && cp -r ../../templates templates && rm -rf templates/*/node_modules templates/*/.next templates/*/.cache templates/*/*.tsbuildinfo && (for d in templates/*; do mv $d/.gitignore $d/gitignore || true; done) && bun run build ",
+    "build": "tsc",
     "test": "npm_config_user_agent=bun vitest run"
   },
   "devDependencies": {
