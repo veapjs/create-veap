@@ -1,5 +1,11 @@
 # create-veap
 
+## 0.4.3
+
+### Patch Changes
+
+- fix: fix deps
+
 ## 0.4.2
 
 ### Patch Changes
