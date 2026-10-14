@@ -1,5 +1,12 @@
 # create-veap
 
+## 0.4.4
+
+### Patch Changes
+
+- feat: add support for positional project name argument and improve prompts in CLI
+- refactor: include tests in tsconfig and add vitest configuration
+
 ## 0.4.3
 
 ### Patch Changes

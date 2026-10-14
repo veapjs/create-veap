@@ -55,8 +55,17 @@ const templateRoot = path.join(
 );
 
 // FIXME is there a better way with prompts?
+const args = process.argv.slice(2);
+
+// Accept a positional project name as an alias for --name so that
+// `bun create veap my-app` works without the explicit flag.
+let positionalName: string | undefined;
+if (args[0] && !args[0].startsWith('--')) {
+  positionalName = args.shift()!;
+}
+
 const { values } = parseArgs({
-  args: process.argv.slice(2),
+  args,
   options: {
     choose: {
       type: 'boolean',
@@ -78,6 +87,7 @@ const { values } = parseArgs({
       short: 'h',
     },
   },
+  strict: false,
 });
 
 const onCancel = () => {
@@ -104,11 +114,12 @@ async function doPrompts() {
     !existsSync(dir) || readdirSync(dir).length === 0;
 
   const templateNames = await getTemplateNames(templateRoot);
+  const templateNameArg = typeof values.template === 'string' ? values.template : undefined;
 
   if (
     !values.example &&
-    values.template &&
-    !templateNames.includes(values.template)
+    templateNameArg &&
+    !templateNames.includes(templateNameArg)
   ) {
     p.cancel(
       `${pc.red('✖')} Unknown template "${values.template}". ` +
@@ -119,17 +130,24 @@ async function doPrompts() {
   }
 
   const defaultProjectName = 'veap-project';
-  let targetDir = values['name'] || defaultProjectName;
+
+  // Prefer an explicitly supplied --name, then a positional argument,
+  // then fall back to the default project name.
+  let targetDir = String(values['name'] ?? positionalName ?? defaultProjectName);
+
+  // If --name was supplied on the command line, use it as the default in the
+  // interactive prompt so the user can still edit it.
+  const promptDefault = String(values['name'] ?? positionalName ?? defaultProjectName);
 
   try {
     const results = await p.group(
       {
         projectName: () => {
-          if (values['name']) {
-            return Promise.resolve(values['name']);
+          if (values['name'] || positionalName) {
+            return Promise.resolve(String(values['name'] ?? positionalName));
           }
           return p.text({
-            defaultValue: targetDir,
+            defaultValue: promptDefault,
             message: 'Project Name',
             placeholder: defaultProjectName,
           });
@@ -166,9 +184,9 @@ async function doPrompts() {
           });
         },
         templateName: () => {
-          if (!values.choose || values.template || values.example) {
+          if (!values.choose || templateNameArg || typeof values.example === 'string') {
             return Promise.resolve(
-              values.template || values.example || templateNames[0],
+              templateNameArg ?? (typeof values.example === 'string' ? values.example : templateNames[0]),
             );
           }
           return p.select({
@@ -229,10 +247,10 @@ async function init() {
     return;
   }
 
-  const exampleOption = await parseExampleOption(values.example);
+  const exampleOption = await parseExampleOption(typeof values.example === 'string' ? values.example : undefined);
 
   const { packageName, templateName, targetDir } = await doPrompts();
-  const root = path.resolve(targetDir);
+  const root = path.resolve(String(targetDir));
 
   console.log('Setting up project...');
 
@@ -268,10 +286,10 @@ async function init() {
   const installProcess = spawn(packageManager, ['install'], {
     stdio: 'inherit',
     shell: process.platform === 'win32',
-    cwd: targetDir,
+    cwd: String(targetDir),
   });
 
-  installProcess.on('close', (code) => {
+  installProcess.on('close', (code: number | null) => {
     // process exit code
     if (code !== 0) {
       console.log(`Could not execute ${commands.install}. Please run`);

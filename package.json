@@ -1,6 +1,6 @@
 {
   "name": "create-veap",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "author": "Damian Miller",
   "type": "module",
   "description": "Initializer for Veap Framework applications",

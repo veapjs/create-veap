@@ -11,7 +11,7 @@ import {
   test,
 } from "vitest";
 
-const CLI_PATH = path.join(import.meta.dirname, "../../dist/index.js");
+const CLI_PATH = path.join(import.meta.dirname, "../dist/index.js");
 
 const projectName = "test-veap-app";
 const genPath = path.join(import.meta.dirname, projectName);
@@ -85,7 +85,7 @@ type TemplateCaseArgs = { name: string; index: number; dependencies: string[] };
 
 const templateChooseCases = (() => {
   // grab the current list of templates
-  const templatesRootPath = path.join(import.meta.dirname, "../../templates");
+  const templatesRootPath = path.join(import.meta.dirname, "../templates");
   const templates = fs.readdirSync(templatesRootPath).sort();
 
   const seenDependecies: Set<string>[] = [];
