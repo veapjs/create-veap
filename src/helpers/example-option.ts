@@ -1,8 +1,8 @@
-import { Readable } from 'node:stream';
-import { pipeline } from 'node:stream/promises';
-import type { ReadableStream } from 'stream/web';
-import pc from 'picocolors';
-import * as tar from 'tar';
+import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
+import pc from "picocolors";
+import type { ReadableStream } from "stream/web";
+import * as tar from "tar";
 
 type RepoInfo = {
   username: string | undefined;
@@ -13,7 +13,7 @@ type RepoInfo = {
 
 async function isUrlOk(url: string): Promise<boolean> {
   try {
-    const res = await fetch(url, { method: 'HEAD' });
+    const res = await fetch(url, { method: "HEAD" });
     return res.status === 200;
   } catch {
     return false;
@@ -26,8 +26,8 @@ interface GetRepoInfo {
   default_branch: string;
 }
 async function getRepoInfo(url: URL): Promise<RepoInfo | undefined> {
-  const [, username, name, t, _branch, ...file] = url.pathname.split('/');
-  const filePath = file.join('/');
+  const [, username, name, t, _branch, ...file] = url.pathname.split("/");
+  const filePath = file.join("/");
 
   if (
     // Support repos whose entire purpose is to be a waku example, e.g.
@@ -36,7 +36,7 @@ async function getRepoInfo(url: URL): Promise<RepoInfo | undefined> {
     // Support GitHub URL that ends with a trailing slash, e.g.
     // https://github.com/:username/:my-cool-waku-example-repo-name/
     // In this case "t" will be an empty string while the next part "_branch" will be undefined
-    (t === '' && _branch === undefined)
+    (t === "" && _branch === undefined)
   ) {
     try {
       const infoResponse = await fetch(
@@ -47,13 +47,13 @@ async function getRepoInfo(url: URL): Promise<RepoInfo | undefined> {
       }
 
       const info = (await infoResponse.json()) as GetRepoInfo;
-      return { username, name, branch: info['default_branch'], filePath };
+      return { username, name, branch: info["default_branch"], filePath };
     } catch {
       return;
     }
   }
 
-  if (username && name && _branch && t === 'tree') {
+  if (username && name && _branch && t === "tree") {
     return { username, name, branch: _branch, filePath };
   }
 }
@@ -65,7 +65,7 @@ function hasRepo({
   filePath,
 }: RepoInfo): Promise<boolean> {
   const contentsUrl = `https://api.github.com/repos/${username}/${name}/contents`;
-  const packagePath = `${filePath ? `/${filePath}` : ''}/package.json`;
+  const packagePath = `${filePath ? `/${filePath}` : ""}/package.json`;
 
   return isUrlOk(contentsUrl + packagePath + `?ref=${branch}`);
 }
@@ -90,11 +90,11 @@ async function downloadAndExtractRepo(
     ),
     tar.x({
       cwd: root,
-      strip: filePath ? filePath.split('/').length + 1 : 1,
+      strip: filePath ? filePath.split("/").length + 1 : 1,
       filter: (p) =>
         p.startsWith(
-          `${name}-${branch?.replace(/\//g, '-')}${
-            filePath ? `/${filePath}/` : '/'
+          `${name}-${branch?.replace(/\//g, "-")}${
+            filePath ? `/${filePath}/` : "/"
           }`,
         ),
     }),
@@ -106,7 +106,7 @@ function getValidURL(url: string): URL | undefined {
     return new URL(url);
   } catch (error) {
     const err = error as Error & { code: string | undefined };
-    if (err.code !== 'ERR_INVALID_URL') {
+    if (err.code !== "ERR_INVALID_URL") {
       console.error(error);
       process.exit(1);
     }
@@ -138,8 +138,8 @@ export async function parseExampleOption(
 
   // NOTE check github origin
   if (
-    repoUrl.origin !== 'https://github.com' &&
-    repoUrl.origin !== 'https://www.github.com'
+    repoUrl.origin !== "https://github.com" &&
+    repoUrl.origin !== "https://www.github.com"
   ) {
     console.error(
       `Invalid URL: ${pc.red(
