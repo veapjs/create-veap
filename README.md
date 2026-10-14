@@ -1,6 +1,11 @@
+[![CI](https://github.com/veapjs/create-veap/actions/workflows/CI.yml/badge.svg)](https://github.com/veapjs/create-veap/actions/workflows/CI.yml)
+[![Release](https://github.com/veapjs/create-veap/actions/workflows/RELEASE.yml/badge.svg)](https://github.com/veapjs/create-veap/actions/workflows/RELEASE.yml)
+[![Version](https://img.shields.io/npm/v/create-veap?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/create-veap)
+
+
 # create-veap
 
-The official project initializer for [Veap Framework](https://veap.pl) applications. Scaffolds a full plugin-enabled Veap project on top of the official `create-next-app`.
+The official project initializer for [Veap Framework](https://veap.pl) applications. It scaffolds a Next.js project on top of the official `create-next-app` and overlays a Veap-compatible structure.
 
 ## Quickstart
 
@@ -30,39 +35,35 @@ npx create-veap my-app
 
 When you omit the project name in an interactive terminal, `create-veap` prompts for a project name.
 
-During project creation, `create-veap` asks whether to include optional Docker configuration (`Dockerfile`, `compose.yml`, and `.dockerignore`). You can pass `--docker` or `--no-docker` to bypass the interactive prompt.
-
 ## Command options
 
-| Flag             | Description                                                                    |
-| ---------------- | ------------------------------------------------------------------------------ |
-| `--docker`       | Generate Docker configuration (`Dockerfile`, `compose.yml`, `.dockerignore`).   |
-| `--no-docker`    | Skip Docker configuration without prompting.                                  |
-| `--skip-install` | Do not run the package manager install step.                                   |
-| `--pm <manager>` | Specify package manager (`bun`, `pnpm`, `npm`, `yarn`).                        |
-| `--pnpm`         | Force pnpm as package manager.                                                |
-| `--bun`          | Force Bun as package manager.                                                 |
-| `--npm`          | Force npm as package manager.                                                 |
-| `--yarn`         | Force Yarn as package manager.                                                |
+All flags are optional.
+
+| Flag            | Description                                                                 |
+| --------------- | --------------------------------------------------------------------------- |
+| `--name <name>` | Provide the project name up front, skipping the interactive prompt.       |
+| `--template <name>` | Select a template by name (for example `01-basic`) instead of choosing interactively. |
+| `--example <url>` | Use a GitHub repository as the source for scaffolding instead of a built-in template. |
+| `--choose`      | Force interactive template selection even when a template or example is available. |
+| `--skip-install` | Do not run the package manager install step after scaffolding.              |
+| `--help` (`-h`) | Show the usage message.                                                     |
 
 ### Automatic package manager detection
 
 `create-veap` automatically detects the package manager from the execution command (`bun create`, `pnpm create`, `npm create`, `yarn create`, `bunx`, or `npx`) and environment variables without prompting.
 
-If you want to use a different package manager than the runner (for example, executing via Bun while configuring the generated project for pnpm), pass the target package manager flag:
-
-```bash
-bun create veap my-app --pnpm
-```
-
 ## What it scaffolds
 
-- Next.js 16 App Router with React Server Components, TypeScript, and Tailwind CSS v4.
-- Veap overlay with virtual routing (`app/[[...catchAll]]/page.tsx` and `app/api/[...catchAll]/route.ts`).
-- Service provider composition root in `lib/veap.ts`.
-- Workspace configuration for plugins (`plugins/` directory).
-- Default environment configuration (`.env`) with generated `ENCRYPTION_KEY` and local SQLite database.
-- Agent instructions (`AGENTS.md`) and project guide (`README.md`).
+The `01-basic` template is a starting Next.js 16 App Router project with React Server Components, TypeScript, Tailwind CSS v4, the Geist font source, and an ESLint configuration.
+
+It also scaffolds:
+
+- `lib/veap.ts` with an `Application` composer and `NextTransportServiceProvider` (cookies, headers, and redirects via `next/headers` and `next/navigation`).
+- `instrumentation.ts` with a `register()` function that runs only in the `nodejs` runtime (the initialization code contains a commented-out `ensureVeap` call).
+- `.env` with placeholder environment variables.
+- `AGENTS.md` with instructions for the assistant.
+- `README.md` with project startup instructions.
+- A base `.gitignore`.
 
 ## Documentation
 

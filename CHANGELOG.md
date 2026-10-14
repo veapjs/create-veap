@@ -1,11 +1,17 @@
 # create-veap
 
+## 0.4.1
+
+### Patch Changes
+
+- bump: fix README.md
+
 ## 0.4.0
 
 ### Minor Changes
 
 - refactor: remove tests and update project structure
-  
+
   - Deleted existing test files for package-manager, project-name, and smoke tests.
   - Updated tsconfig.json to include src directory and exclude templates.
   - Added cli.js as entry point for the CLI.
