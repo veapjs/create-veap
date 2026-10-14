@@ -1,5 +1,11 @@
 # create-veap
 
+## 0.4.2
+
+### Patch Changes
+
+- fix: fix templates/01-basic instrumentation.ts and veap.config.ts
+
 ## 0.4.1
 
 ### Patch Changes

@@ -3,6 +3,6 @@ export async function register() {
     return;
   }
 
-  //   const { ensureVeap } = await import("./lib/veap");
-  //   await ensureVeap();
+  const { initializeSystem } = await import("./lib/veap");
+  await initializeSystem();
 }
