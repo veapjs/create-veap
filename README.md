@@ -1,5 +1,5 @@
-[![CI](https://github.com/veapjs/create-veap/actions/workflows/CI.yml/badge.svg)](https://github.com/veapjs/create-veap/actions/workflows/CI.yml)
-[![Release](https://github.com/veapjs/create-veap/actions/workflows/RELEASE.yml/badge.svg)](https://github.com/veapjs/create-veap/actions/workflows/RELEASE.yml)
+[![CI](https://github.com/veapjs/create-veap/actions/workflows/ci.yml/badge.svg)](https://github.com/veapjs/create-veap/actions/workflows/ci.yml)
+[![Release](https://github.com/veapjs/create-veap/actions/workflows/release.yml/badge.svg)](https://github.com/veapjs/create-veap/actions/workflows/release.yml)
 [![Version](https://img.shields.io/npm/v/create-veap?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/create-veap)
 
 
