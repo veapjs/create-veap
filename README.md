@@ -5,7 +5,7 @@
 
 # create-veap
 
-The official project initializer for [Veap Framework](https://veap.pl) applications. It scaffolds a Next.js project on top of the official `create-next-app` and overlays a Veap-compatible structure.
+The official project initializer for [Veap Framework](https://veap.pl) applications. It scaffolds a new Next.js and Veap application from built-in or remote templates.
 
 ## Quickstart
 
@@ -70,7 +70,8 @@ It also scaffolds:
 For full documentation and guides, visit:
 - [https://veap.pl/docs](https://veap.pl/docs)
 - [Installation Guide](https://veap.pl/docs/getting-started/installation)
-- [CLI Reference](https://veap.pl/docs/reference/cli)
+- [Scaffolding Guide](https://veap.pl/docs/guides/create-veap)
+- [CLI Reference](https://veap.pl/docs/reference/packages/create-veap)
 
 ## License
 
